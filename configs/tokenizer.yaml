@@ -1,0 +1,6 @@
+name: tok_en_8k
+pattern: qwen            # key into SPLIT_PATTERNS
+vocab_size: 8192 # for tiny stories
+train_data: data/raw/tinystories_sample.txt
+max_train_chars: 50000000
+output_dir: artifacts/tokenizers/tok_en_8k

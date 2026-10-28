@@ -5,9 +5,10 @@ from nanollm.tokenizer.tokenizer import BPETokenizer
 
 def test_roundtrip():
     tok = BPETokenizer()
-    tok.train("aaabdaaabac" * 50, vocab_size=260)
-    for s in ["aaabdaaabac", "hello world", "héllo 你好 🙂", ""]:
+    tok.train("aaabdaaabac  \n\n " * 50, vocab_size=260)
+    for s in ["aaabdaaabac \n\n ", " hello world ", "héllo 你好 🙂", ""]:
         assert tok.decode(tok.encode(s)) == s
+        assert "".join(tok.compiled_pattern.findall(s)) == s
 
 
 def test_compression():
@@ -38,3 +39,16 @@ def test_retraining_resets_state():
     tok.train("hello", vocab_size=256)
     assert len(tok.vocab) == 256
     assert tok.merges == {}
+
+def test_save_load(tmp_path):
+    tok = BPETokenizer(pattern="qwen")
+    tok.train("hello world, hello there " * 100, vocab_size=300)
+    tok.save(tmp_path / "tok.json")
+    tok2 = BPETokenizer.load(tmp_path / "tok.json")
+    s = " hello world 123 \t \n\n\n"
+    assert tok.encode(s) == tok2.encode(s)
+    assert tok2.decode(tok2.encode(s)) == s
+
+def test_digits_split_qwen():
+    tok = BPETokenizer(pattern="qwen")
+    assert tok.compiled_pattern.findall("12345") == list("12345")
