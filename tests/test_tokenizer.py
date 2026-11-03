@@ -17,6 +17,7 @@ def test_compression():
     tok.train(text, vocab_size=260)
     assert len(tok.encode(text)) < len(text.encode("utf-8"))
 
+
 def test_decode_partial_utf8():
     tok = BPETokenizer()
     # "你" is 3 bytes; the first byte alone is invalid UTF-8
@@ -40,6 +41,7 @@ def test_retraining_resets_state():
     assert len(tok.vocab) == 256
     assert tok.merges == {}
 
+
 def test_save_load(tmp_path):
     tok = BPETokenizer(pattern="qwen")
     tok.train("hello world, hello there " * 100, vocab_size=300)
@@ -48,6 +50,7 @@ def test_save_load(tmp_path):
     s = " hello world 123 \t \n\n\n"
     assert tok.encode(s) == tok2.encode(s)
     assert tok2.decode(tok2.encode(s)) == s
+
 
 def test_digits_split_qwen():
     tok = BPETokenizer(pattern="qwen")

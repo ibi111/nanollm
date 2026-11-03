@@ -1,7 +1,9 @@
 from pathlib import Path
+
 from datasets import load_dataset  # uv add datasets
 
-out = Path("data/raw"); out.mkdir(parents=True, exist_ok=True)
+out = Path("data/raw")
+out.mkdir(parents=True, exist_ok=True)
 ds = load_dataset("roneneldan/TinyStories", split="train", streaming=True)
 
 written = 0
