@@ -24,3 +24,23 @@ dev = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["src", "tests", "scripts"]
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F",   # pycodestyle errors, pyflakes (unused imports/vars)
+    "I",        # import sorting
+    "B",        # likely bugs (flake8-bugbear)
+    "UP",       # modernize syntax
+    "N",        # naming
+]
+ignore = ["E501"]  # regex patterns and comments can't be wrapped safely
+
+[tool.ruff.format]
+quote-style = "double"
